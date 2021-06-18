@@ -8,12 +8,17 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [ '8', '11', '13', '15' ]
+        os: [macos-latest, windows-latest, ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 11
+    - name: Java ${{ matrix.Java }} sample
       uses: actions/setup-java@v1
       with:
-        java-version: 11
+        java-version: ${{ matrix.java }}
     - name: Build native with Maven
       run: mvn -B package
